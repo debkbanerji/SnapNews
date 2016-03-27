@@ -33,10 +33,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.List;
 import java.util.Map;
@@ -81,29 +83,46 @@ public class MainActivity extends AppCompatActivity {
                     }
                 } //Code for populating Feed
 
-                feedList[0] = new ArrayList<Object>(feed.values());
-                //Collections.reverse(feedList[0]);
-                Collections.sort(feedList[0], new Comparator() {
-                    @Override
-                    public int compare(Object lhs, Object rhs) {
-                        if (lhs instanceof HashMap && rhs instanceof HashMap) {
-                            boolean leftSeen = (Boolean) ((HashMap) lhs).get("seen");
-                            boolean rightSeen = (Boolean) ((HashMap) rhs).get("seen");
-                            if (leftSeen && !rightSeen) {
-                                return 1;
-                            }//checking if seen first
-                            if (((Long) ((HashMap) lhs).get("postTime") - (Long) ((HashMap) rhs).get("postTime")) < 0) {
-                                return 1;
-                            }//checking post time next
+//                Collection<Object> feedCollection = feed.values();
+//                boolean alltrue = true;
+//                for (Object o : feedCollection) {
+//                    if (o instanceof HashMap) {
+//                        boolean seenValue = (Boolean) ((HashMap) o).get("seen");
+//                        if (seenValue == false) {
+//                            alltrue = false;
+//                        }
+//                    }
+//                }
+//                if (alltrue) {// if everything is seen, set everything to unseen
+//                    for (Object o : feedCollection) {
+//                        if (o instanceof HashMap) {
+//                            ((HashMap) o).put("seen", false);
+//                        }
+//                    }
+//                }
+                    feedList[0] = new ArrayList<Object>(feed.values());
+                    //Collections.reverse(feedList[0]);
+                    Collections.sort(feedList[0], new Comparator() {
+                        @Override
+                        public int compare(Object lhs, Object rhs) {
+                            if (lhs instanceof HashMap && rhs instanceof HashMap) {
+                                boolean leftSeen = (Boolean) ((HashMap) lhs).get("seen");
+                                boolean rightSeen = (Boolean) ((HashMap) rhs).get("seen");
+                                if (leftSeen && !rightSeen) {
+                                    return 1;
+                                }//checking if seen first
+                                if (((Long) ((HashMap) lhs).get("postTime") - (Long) ((HashMap) rhs).get("postTime")) < 0) {
+                                    return 1;
+                                }//checking post time next
+                            }
+                            return -1;
                         }
-                        return -1;
-                    }
-                });
+                    });
 
-                List<Object> singleList = new ArrayList<Object>();
-                if (feedList[0].size() > 0) {
-                    singleList.add(feedList[0].get(0));
-                }
+                    List<Object> singleList = new ArrayList<Object>();
+                    if (feedList[0].size() > 0) {
+                        singleList.add(feedList[0].get(0));
+                    }
 
 //                if (feedList[0].size() > 1 && (Boolean)(((HashMap) feedList[0].get(1)).get("seen"))) {
 //                    for (Object h: feedList[0]) {
@@ -111,23 +130,27 @@ public class MainActivity extends AppCompatActivity {
 //                    }
 //                }
 
-                feedAdapter[0] = new FeedListAdapter(
-                        getBaseContext(), com.example.SnapNews.R.layout.feed_item, singleList);
-                feedListView.setAdapter(feedAdapter[0]);
+                    feedAdapter[0] = new FeedListAdapter(
+                            getBaseContext(), com.example.SnapNews.R.layout.feed_item, singleList);
+                    feedListView.setAdapter(feedAdapter[0]);
+                }
+
+                @Override
+                public void onCancelled (FirebaseError error){
+                }
             }
 
-            @Override
-            public void onCancelled(FirebaseError error) {
-            }
-        });
+            );
 
 
-        ImageButton dismissButton = (ImageButton) findViewById(com.example.SnapNews.R.id.dismissButton);
-        assert dismissButton != null;
+            ImageButton dismissButton = (ImageButton) findViewById(com.example.SnapNews.R.id.dismissButton);
+            assert dismissButton!=null;
 
-        dismissButton.setOnClickListener(new View.OnClickListener() {//setting seen value of first to true and updating database
-            @Override
-            public void onClick(View v) {
+            dismissButton.setOnClickListener(new View.OnClickListener()
+
+            {//setting seen value of first to true and updating database
+                @Override
+                public void onClick (View v){
 
                 if (feedList[0].size() > 0) {
                     final HashMap oldArticle = (HashMap) (feedList[0]).get(0);
@@ -138,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
                     Iterator it = feed.entrySet().iterator();
                     while (it.hasNext()) {
                         Map.Entry pair = (Map.Entry) it.next();
-                        if (((HashMap) pair.getValue()).containsValue(oldArticle.get("url"))) {
+                        if (pair.getValue() instanceof HashMap && ((HashMap) pair.getValue()).containsValue(oldArticle.get("url"))) {
                             it.remove();
                         }
                     }
@@ -147,29 +170,37 @@ public class MainActivity extends AppCompatActivity {
                     articleBase.child("ArticleList").setValue(feed);
                 }
             }
-        });
+            }
 
-        ImageButton commentButton = (ImageButton) findViewById(R.id.commentButton);
-        assert commentButton != null;
+            );
 
-        commentButton.setOnClickListener(new View.OnClickListener() {//setting seen value of first to true and updating database
-            @Override
-            public void onClick(View v) {
+            ImageButton commentButton = (ImageButton) findViewById(R.id.commentButton);
+            assert commentButton!=null;
+
+            commentButton.setOnClickListener(new View.OnClickListener()
+
+            {//setting seen value of first to true and updating database
+                @Override
+                public void onClick (View v){
 
                 Intent intent = new Intent(getBaseContext(), Comments.class);
                 startActivity(intent);
             }
-        });
+            }
+
+            );
 
 
-        ImageButton shareButton = (ImageButton) findViewById(com.example.SnapNews.R.id.shareButton);
-        assert shareButton != null;
+            ImageButton shareButton = (ImageButton) findViewById(com.example.SnapNews.R.id.shareButton);
+            assert shareButton!=null;
 
-        final RequestQueue queue = Volley.newRequestQueue(this);
+            final RequestQueue queue = Volley.newRequestQueue(this);
 
-        shareButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            shareButton.setOnClickListener(new View.OnClickListener()
+
+            {
+                @Override
+                public void onClick (View v){
                 final Article[] addArticle = new Article[1];
 
                 final String URL = enteredURL.getText().toString();
@@ -248,6 +279,8 @@ public class MainActivity extends AppCompatActivity {
                 };
                 queue.add(request);
             }
-        });
+            }
+
+            );
+        }
     }
-}
