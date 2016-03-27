@@ -1,11 +1,13 @@
 package com.example.SnapNews;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Adapter;
 import android.widget.AdapterViewFlipper;
 import android.widget.Button;
@@ -149,6 +151,8 @@ public class MainActivity extends AppCompatActivity {
                 final String URL = enteredURL.getText().toString();
                 final String[] summary = {""};
                 enteredURL.setText("");
+                InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
 
                 Snackbar.make(v, "Generating Summary...", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
