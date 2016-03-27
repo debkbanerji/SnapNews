@@ -1,5 +1,6 @@
 package com.example.SnapNews;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -135,6 +136,19 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        ImageButton commentButton = (ImageButton) findViewById(R.id.commentButton);
+        assert commentButton != null;
+
+        commentButton.setOnClickListener(new View.OnClickListener() {//setting seen value of first to true and updating database
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getBaseContext(), Comments.class);
+                startActivity(intent);
+            }
+        });
+
 
         ImageButton shareButton = (ImageButton) findViewById(com.example.SnapNews.R.id.shareButton);
         assert shareButton != null;
