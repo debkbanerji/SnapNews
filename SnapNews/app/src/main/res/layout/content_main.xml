@@ -8,7 +8,6 @@
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
     android:paddingTop="1dp"
-    android:background="#eeeeee"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.SnapNews.MainActivity"
     tools:showIn="@layout/activity_main">
@@ -37,38 +36,25 @@
         android:layout_alignParentTop="true"
         android:background="@drawable/plus_small" />
 
+    <ImageButton
+        android:id="@+id/dismissButton"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/shareButton"
+        android:background="@drawable/next_page"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <ListView
         android:id="@+id/feedListView"
         android:layout_width="360dp"
-        android:layout_height="410dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/shareButton"
         android:animateLayoutChanges="true"
         android:stackFromBottom="false" />
-
-    <LinearLayout
-        android:layout_width="360dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/feedListView"
-        android:orientation="horizontal">
-
-        <ImageButton
-            android:id="@+id/commentButton"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/comment_button" />
-
-        <ImageButton
-            android:id="@+id/dismissButton"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_marginLeft="260dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/next_page" />
-
-    </LinearLayout>
 
 </RelativeLayout>
