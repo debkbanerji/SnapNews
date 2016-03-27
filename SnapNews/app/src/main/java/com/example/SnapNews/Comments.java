@@ -26,7 +26,7 @@ public class Comments extends AppCompatActivity {
 
         comments.add(new Comment("ThatGuyYouMetThatOneTime151", "Omg This article is amazing"));
         comments.add(new Comment("ThatOtherGuyYouMetThatOtherTime721", "And so is this app!"));
-        comments.add(new Comment("SomeRandomPerson251", "Ikr, it's totally rad!! It's not weird because \"totally rad\" seems like a perfectly plausible thing for real people to say! "));
+        comments.add(new Comment("SomeRandomPerson251", "Ikr, it's totally rad!! It's not weird because \"totally rad\" seems like a perfectly plausible thing for real people in 2016 to say! "));
         comments.add(new Comment("AnotherRandomPerson386", "I know one of the developers :)"));
         comments.add(new Comment("YetAnotherRandomPerson493", "REALLLYYYY?!?!?!!?!!"));
         comments.add(new Comment("SomeRandomPerson251", "Which one?"));

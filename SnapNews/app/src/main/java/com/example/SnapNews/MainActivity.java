@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
                         feed.put(entry.getKey(), entry.getValue());
                     }
                 } //Code for populating Feed
+
                 feedList[0] = new ArrayList<Object>(feed.values());
                 //Collections.reverse(feedList[0]);
                 Collections.sort(feedList[0], new Comparator() {
@@ -95,10 +96,18 @@ public class MainActivity extends AppCompatActivity {
                         return -1;
                     }
                 });
+
                 List<Object> singleList = new ArrayList<Object>();
                 if (feedList[0].size() > 0) {
                     singleList.add(feedList[0].get(0));
                 }
+
+//                if (feedList[0].size() > 1 && (Boolean)(((HashMap) feedList[0].get(1)).get("seen"))) {
+//                    for (Object h: feedList[0]) {
+//                        ((HashMap) h).put()
+//                    }
+//                }
+
                 feedAdapter[0] = new FeedListAdapter(
                         getBaseContext(), com.example.SnapNews.R.layout.feed_item, singleList);
                 feedListView.setAdapter(feedAdapter[0]);
