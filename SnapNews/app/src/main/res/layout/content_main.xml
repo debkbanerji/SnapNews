@@ -26,7 +26,7 @@
         android:scrollbars = "horizontal"
         android:isScrollContainer="true" />
 
-    <Button
+    <ImageButton
         android:id="@+id/shareButton"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
@@ -34,7 +34,8 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:text="Share" />
+        android:background="@drawable/plus_small"
+        />
 
     <ListView
         android:id="@+id/feedListView"

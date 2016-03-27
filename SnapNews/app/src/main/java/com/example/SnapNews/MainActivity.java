@@ -5,9 +5,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.AdapterViewFlipper;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ViewFlipper;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -57,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         feedAdapter[0] = new FeedListAdapter(
                 this, com.example.SnapNews.R.layout.feed_item, feedList[0]);
 
+//        final ListView feedListView = (ListView) findViewById(com.example.SnapNews.R.id.feedListView);
         final ListView feedListView = (ListView) findViewById(com.example.SnapNews.R.id.feedListView);
         feedListView.setAdapter(feedAdapter[0]);
 
@@ -93,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        Button shareButton = (Button) findViewById(com.example.SnapNews.R.id.shareButton);
+        ImageButton shareButton = (ImageButton) findViewById(com.example.SnapNews.R.id.shareButton);
         assert shareButton != null;
 
         final RequestQueue queue = Volley.newRequestQueue(this);

@@ -1,5 +1,3 @@
-Main: FF5821
-3C91E6
-342E37
-A2D729
-FAFFFD
+        <item name="colorPrimary">#FF5821</item>
+        <item name="colorPrimaryDark">#69140E</item>
+        <item name="colorAccent">#2176AE</item>
