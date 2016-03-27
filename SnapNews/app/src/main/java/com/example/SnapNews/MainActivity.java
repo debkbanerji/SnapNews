@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Adapter;
 import android.widget.AdapterViewFlipper;
 import android.widget.Button;
@@ -44,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
         Firebase.setAndroidContext(this);
         setContentView(com.example.SnapNews.R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(com.example.SnapNews.R.id.toolbar);
@@ -172,6 +175,8 @@ public class MainActivity extends AppCompatActivity {
                 final String URL = enteredURL.getText().toString();
                 final String[] summary = {""};
                 enteredURL.setText("");
+                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
 
                 Snackbar.make(v, "Generating Summary...", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
