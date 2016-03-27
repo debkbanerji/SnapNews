@@ -1,19 +1,15 @@
 package com.example.SnapNews;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
-import android.widget.Adapter;
-import android.widget.AdapterViewFlipper;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.StackView;
-import android.widget.ViewFlipper;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -133,6 +129,18 @@ public class MainActivity extends AppCompatActivity {
                     articleBase.removeValue();
                     articleBase.child("ArticleList").setValue(feed);
                 }
+            }
+        });
+
+        ImageButton commentButton = (ImageButton) findViewById(R.id.commentButton);
+        assert commentButton != null;
+
+        commentButton.setOnClickListener(new View.OnClickListener() {//setting seen value of first to true and updating database
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getBaseContext(), Comments.class);
+                startActivity(intent);
             }
         });
 
