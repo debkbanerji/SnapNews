@@ -135,8 +135,9 @@ public class MainActivity extends AppCompatActivity {
                                         summary[0] = summary[0].replace("\",\"", "");
                                         summary[0] = summary[0].replace("\\n", "");
                                         summary[0] = summary[0].replace("\\\"", "\"");
+                                        //cleaning up summary
                                         if (!URL.equals("")) {
-                                            System.out.println("Bitch we made it");
+                                            System.out.println("we made it");
                                             addArticle[0] = new Article(URL, summary[0], (String) response.get("title"));
 
                                             Iterator it = feed.entrySet().iterator();
