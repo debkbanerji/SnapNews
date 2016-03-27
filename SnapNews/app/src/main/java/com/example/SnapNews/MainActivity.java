@@ -1,6 +1,8 @@
 package com.example.SnapNews;
 
 import android.content.Intent;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -51,12 +53,15 @@ public class MainActivity extends AppCompatActivity {
 
         Firebase.setAndroidContext(this);
         setContentView(com.example.SnapNews.R.layout.activity_main);
+
+
+
         Toolbar toolbar = (Toolbar) findViewById(com.example.SnapNews.R.id.toolbar);
         setSupportActionBar(toolbar);
 
 
-        final EditText enteredURL = (EditText) findViewById(com.example.SnapNews.R.id.enterURL);
 
+        final EditText enteredURL = (EditText) findViewById(com.example.SnapNews.R.id.enterURL);
         enteredURL.setMovementMethod(new ScrollingMovementMethod());
 
         final Firebase articleBase = new Firebase("https://brilliant-fire-8390.firebaseio.com/");
@@ -74,14 +79,14 @@ public class MainActivity extends AppCompatActivity {
         feedListView.setAdapter(feedAdapter[0]);
 
         articleBase.child("ArticleList").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                Map<String, HashMap> newFeed = (Map<String, HashMap>) snapshot.getValue();
-                if (newFeed != null) {
-                    for (Map.Entry<String, HashMap> entry : newFeed.entrySet()) {
-                        feed.put(entry.getKey(), entry.getValue());
-                    }
-                } //Code for populating Feed
+                                                                   @Override
+                                                                   public void onDataChange(DataSnapshot snapshot) {
+                                                                       Map<String, HashMap> newFeed = (Map<String, HashMap>) snapshot.getValue();
+                                                                       if (newFeed != null) {
+                                                                           for (Map.Entry<String, HashMap> entry : newFeed.entrySet()) {
+                                                                               feed.put(entry.getKey(), entry.getValue());
+                                                                           }
+                                                                       } //Code for populating Feed
 
 //                Collection<Object> feedCollection = feed.values();
 //                boolean alltrue = true;
@@ -100,29 +105,29 @@ public class MainActivity extends AppCompatActivity {
 //                        }
 //                    }
 //                }
-                    feedList[0] = new ArrayList<Object>(feed.values());
-                    //Collections.reverse(feedList[0]);
-                    Collections.sort(feedList[0], new Comparator() {
-                        @Override
-                        public int compare(Object lhs, Object rhs) {
-                            if (lhs instanceof HashMap && rhs instanceof HashMap) {
-                                boolean leftSeen = (Boolean) ((HashMap) lhs).get("seen");
-                                boolean rightSeen = (Boolean) ((HashMap) rhs).get("seen");
-                                if (leftSeen && !rightSeen) {
-                                    return 1;
-                                }//checking if seen first
-                                if (((Long) ((HashMap) lhs).get("postTime") - (Long) ((HashMap) rhs).get("postTime")) < 0) {
-                                    return 1;
-                                }//checking post time next
-                            }
-                            return -1;
-                        }
-                    });
+                                                                       feedList[0] = new ArrayList<Object>(feed.values());
+                                                                       //Collections.reverse(feedList[0]);
+                                                                       Collections.sort(feedList[0], new Comparator() {
+                                                                           @Override
+                                                                           public int compare(Object lhs, Object rhs) {
+                                                                               if (lhs instanceof HashMap && rhs instanceof HashMap) {
+                                                                                   boolean leftSeen = (Boolean) ((HashMap) lhs).get("seen");
+                                                                                   boolean rightSeen = (Boolean) ((HashMap) rhs).get("seen");
+                                                                                   if (leftSeen && !rightSeen) {
+                                                                                       return 1;
+                                                                                   }//checking if seen first
+                                                                                   if (((Long) ((HashMap) lhs).get("postTime") - (Long) ((HashMap) rhs).get("postTime")) < 0) {
+                                                                                       return 1;
+                                                                                   }//checking post time next
+                                                                               }
+                                                                               return -1;
+                                                                           }
+                                                                       });
 
-                    List<Object> singleList = new ArrayList<Object>();
-                    if (feedList[0].size() > 0) {
-                        singleList.add(feedList[0].get(0));
-                    }
+                                                                       List<Object> singleList = new ArrayList<Object>();
+                                                                       if (feedList[0].size() > 0) {
+                                                                           singleList.add(feedList[0].get(0));
+                                                                       }
 
 //                if (feedList[0].size() > 1 && (Boolean)(((HashMap) feedList[0].get(1)).get("seen"))) {
 //                    for (Object h: feedList[0]) {
@@ -130,24 +135,25 @@ public class MainActivity extends AppCompatActivity {
 //                    }
 //                }
 
-                    feedAdapter[0] = new FeedListAdapter(
-                            getBaseContext(), com.example.SnapNews.R.layout.feed_item, singleList);
-                    feedListView.setAdapter(feedAdapter[0]);
-                }
+                                                                       feedAdapter[0] = new FeedListAdapter(
+                                                                               getBaseContext(), com.example.SnapNews.R.layout.feed_item, singleList);
+                                                                       feedListView.setAdapter(feedAdapter[0]);
+                                                                   }
 
-                @Override
-                public void onCancelled (FirebaseError error){
-                }
-            }
+                                                                   @Override
+                                                                   public void onCancelled(FirebaseError error) {
+                                                                   }
+                                                               }
 
-            );
+        );
+
+
 
 
             ImageButton dismissButton = (ImageButton) findViewById(com.example.SnapNews.R.id.dismissButton);
             assert dismissButton!=null;
 
             dismissButton.setOnClickListener(new View.OnClickListener()
-
             {//setting seen value of first to true and updating database
                 @Override
                 public void onClick (View v){
@@ -196,7 +202,25 @@ public class MainActivity extends AppCompatActivity {
 
             final RequestQueue queue = Volley.newRequestQueue(this);
 
-            shareButton.setOnClickListener(new View.OnClickListener()
+
+            ImageButton linkButton = (ImageButton) findViewById(R.id.linkButton);
+            assert linkButton != null;
+
+            linkButton.setOnClickListener(new View.OnClickListener() {
+                String URL = enteredURL.getText().toString();
+
+                @Override
+                public void onClick(View v) {
+                    String passedURL = "http://google.com";
+                    if (feedList[0].size() > 0) {
+                        passedURL = (String) ((HashMap) feedList[0].get(0)).get("url");
+                    }
+                    Uri uri = Uri.parse(passedURL); // missing 'http://' will cause crashed
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    startActivity(intent);
+                }
+            });
+                shareButton.setOnClickListener(new View.OnClickListener()
 
             {
                 @Override
@@ -283,4 +307,4 @@ public class MainActivity extends AppCompatActivity {
 
             );
         }
-    }
+}
