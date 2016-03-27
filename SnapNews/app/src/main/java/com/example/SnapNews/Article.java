@@ -21,20 +21,31 @@ public class Article {
     private String URL;
     private String title;
     private String summary;
+    private String pic;
     private int voteCount;
     private long postTime;
+    private boolean seen;
 
     private RequestQueue queue;
 
 
-    public Article(String URL, String summary, String title) {
+    public Article(String URL, String summary, String title, String image) {
         this.URL = URL;
-        voteCount = 0;
+        //voteCount = 0;
         postTime = System.currentTimeMillis();
         this.summary = summary;
         this.title = title;
+        seen = false;
+        this.pic = image;
     }
 
+    public boolean getSeen() {
+        return seen;
+    }
+
+    public void see() {
+        seen = true;
+    }
 
     public long getPostTime() {
         return postTime;
@@ -48,13 +59,18 @@ public class Article {
         return voteCount;
     }
 
+    public String getSummary() {
+        return summary;
+    }
+
+    public String getPic() {
+        return pic;
+    }
+
     public String getURL() {
         return URL;
     }
 
-    public String getSummary() {
-        return summary;
-    }
 
     public String generateSummary(String url) {
 //        return "Summary of: " + URL;

@@ -33,7 +33,8 @@ public class FeedListAdapter extends ArrayAdapter<HashMap> {
         if (article instanceof HashMap) {
             HashMap<String, Object> m = (HashMap) article;
             TextView titleText = (TextView) convertView.findViewById(com.example.SnapNews.R.id.titleText);
-            titleText.setText((String) (m.get("title")));
+            titleText.setText((String) (m.get("title"))+(m.get("seen")).toString()); //debug statement
+            //titleText.setText((String) (m.get("title")));
             TextView summaryText = (TextView) convertView.findViewById(com.example.SnapNews.R.id.summaryText);
             summaryText.setText((String) (m.get("summary")));
             TextView timeText = (TextView) convertView.findViewById(com.example.SnapNews.R.id.timeText);

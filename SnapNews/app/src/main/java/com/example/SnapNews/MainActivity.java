@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.StackView;
 import android.widget.ViewFlipper;
 
 import com.android.volley.AuthFailureError;
@@ -80,6 +81,9 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public int compare(Object lhs, Object rhs) {
                         if (lhs instanceof Article && rhs instanceof Article) {
+                            if (!(((Article) lhs).getSeen()) && (((Article) lhs).getSeen())) {
+                                return 1;
+                            }
                             if ((((Article) lhs).getPostTime() - ((Article) rhs).getPostTime()) < 0) {
                                 return 1;
                             }
@@ -98,6 +102,30 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        ImageButton dismissButton = (ImageButton) findViewById(com.example.SnapNews.R.id.dismissButton);
+        assert dismissButton != null;
+
+        dismissButton.setOnClickListener(new View.OnClickListener() {//setting seen value of first to true and updating database
+            @Override
+            public void onClick(View v) {
+                final HashMap oldArticle = (HashMap) (feedList[0]).get(0);
+                Article updatedArticle = new Article((String) oldArticle.get("url"),
+                        (String) oldArticle.get("summary"),
+                        (String) oldArticle.get("title"), (String) oldArticle.get("pic"));
+                updatedArticle.see();
+                Iterator it = feed.entrySet().iterator();
+                while (it.hasNext()) {
+                    Map.Entry pair = (Map.Entry) it.next();
+                    if (((HashMap) pair.getValue()).containsValue(updatedArticle)) {
+                        it.remove();
+                    }
+                }
+                feed.put(((Long) updatedArticle.getPostTime()).toString(), updatedArticle);
+                articleBase.removeValue();
+                articleBase.child("ArticleList").setValue(feed);
+            }
+        });
+
         ImageButton shareButton = (ImageButton) findViewById(com.example.SnapNews.R.id.shareButton);
         assert shareButton != null;
 
@@ -113,103 +141,71 @@ public class MainActivity extends AppCompatActivity {
                 enteredURL.setText("");
 
 
-
-
                 String parsedURL;
-                parsedURL = URL.replace(":","%3A");
-                parsedURL = parsedURL.replace("/","%2F");
+                parsedURL = URL.replace(":", "%3A");
+                parsedURL = parsedURL.replace("/", "%2F");
                 String domain = "https://joanfihu-article-analysis-v1.p.mashape.com/link?entity_description=False&link=";
                 parsedURL = domain + parsedURL;
 
                 System.out.println("BEFORE REQUEST");
                 final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, parsedURL, null,
-                            new Response.Listener<JSONObject>() {
-                                @Override
-                                public void onResponse(JSONObject response) {
-                                    try {
-                                        summary[0] = "\n" + response.getString("summary");
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                try {
+                                    summary[0] = "\n" + response.getString("summary");
 
-                                        summary[0] = summary[0].replace("[\"", "");
-                                        summary[0] = summary[0].replace("\"]", "");
-                                        summary[0] = summary[0].replace("\",\"", " ");
-                                        summary[0] = summary[0].replace("\",\"", "");
-                                        summary[0] = summary[0].replace("\\n", "");
-                                        summary[0] = summary[0].replace("\\\"", "\"");
-                                        //cleaning up summary
-                                        if (!URL.equals("")) {
-                                            System.out.println("we made it");
-                                            addArticle[0] = new Article(URL, summary[0], (String) response.get("title"));
+                                    summary[0] = summary[0].replace("[\"", "");
+                                    summary[0] = summary[0].replace("\"]", "");
+                                    summary[0] = summary[0].replace("\",\"", " ");
+                                    summary[0] = summary[0].replace("\",\"", "");
+                                    summary[0] = summary[0].replace("\\n", "");
+                                    summary[0] = summary[0].replace("\\\"", "\"");
+                                    //cleaning up summary
+                                    if (!URL.equals("")) {
+                                        System.out.println("we made it");
+                                        addArticle[0] = new Article(URL, summary[0], (String) response.get("title"),(String) response.get("image"));
 
-                                            Iterator it = feed.entrySet().iterator();
-                                            while (it.hasNext()) {
-                                                Map.Entry pair = (Map.Entry) it.next();
-                                                if (((HashMap) pair.getValue()).containsValue(addArticle[0])) {
-                                                    it.remove();
-                                                }
+                                        Iterator it = feed.entrySet().iterator();
+                                        while (it.hasNext()) {
+                                            Map.Entry pair = (Map.Entry) it.next();
+                                            if (((HashMap) pair.getValue()).containsValue(addArticle[0])) {
+                                                it.remove();
                                             }
-                                            feed.put(((Long) addArticle[0].getPostTime()).toString(), addArticle[0]);
-                                            articleBase.removeValue();
-                                            articleBase.child("ArticleList").setValue(feed);
-                                        };
-
-                                        System.out.println("LEHHGOOO " + summary[0]);
-                                    } catch (JSONException e) {
-                                        //System.out.println("WHUT");
-                                        summary[0] = "That didn't work!";
-                                        e.printStackTrace();
+                                        }
+                                        feed.put(((Long) addArticle[0].getPostTime()).toString(), addArticle[0]);
+                                        articleBase.removeValue();
+                                        articleBase.child("ArticleList").setValue(feed);
                                     }
-                                }
-                            },
-                            new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError volleyError) {
+                                    ;
+
+                                    System.out.println("LEHHGOOO " + summary[0]);
+                                } catch (JSONException e) {
+                                    //System.out.println("WHUT");
                                     summary[0] = "That didn't work!";
-                                    volleyError.printStackTrace();
+                                    e.printStackTrace();
                                 }
-                            })
-                {
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError volleyError) {
+                                summary[0] = "That didn't work!";
+                                volleyError.printStackTrace();
+                            }
+                        }) {
 
                     @Override
                     public Map<String, String> getHeaders() throws AuthFailureError {
                         System.out.println("ADDING HEADERS");
-                        Map<String, String>  params = new HashMap<>();
+                        Map<String, String> params = new HashMap<>();
                         params.put("X-Mashape-Key", "RrzHM7Pua0mshdnzHG0MVXQlTenEp1fTeqzjsntEdavMWDQirq");
                         params.put("Accept", "application/json");
                         return params;
                     }
                 };
-
                 queue.add(request);
-
-
-
-
             }
-
-
-            /**
-            @Override
-            public boolean onOptionsItemSelected(MenuItem item) {
-                // Handle action bar item clicks here. The action bar will
-                // automatically handle clicks on the Home/Up button, so long
-                // as you specify a parent activity in AndroidManifest.xml.
-                int id = item.getItemId();
-
-                //noinspection SimplifiableIfStatement
-                if (id == R.id.action_settings) {
-                    return true;
-                }
-                return super.onOptionsItemSelected(item);
-            }
-
-            @Override
-            public boolean onCreateOptionsMenu(Menu menu) {
-                // Inflate the menu; this adds items to the action bar if it is present.
-                getMenuInflater().inflate(R.menu.menu_main, menu);
-                return true;
-            }**/
-
-
         });
     }
 }

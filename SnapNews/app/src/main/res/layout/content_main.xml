@@ -21,10 +21,10 @@
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/shareButton"
         android:layout_toStartOf="@+id/shareButton"
-        android:maxLines = "1"
-        android:textSize="20sp"
-        android:scrollbars = "horizontal"
-        android:isScrollContainer="true" />
+        android:isScrollContainer="true"
+        android:maxLines="1"
+        android:scrollbars="horizontal"
+        android:textSize="20sp" />
 
     <ImageButton
         android:id="@+id/shareButton"
@@ -34,8 +34,18 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:background="@drawable/plus_small"
-        />
+        android:background="@drawable/plus_small" />
+
+    <ImageButton
+        android:id="@+id/dismissButton"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/shareButton"
+        android:background="@drawable/next_page"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <ListView
         android:id="@+id/feedListView"
@@ -44,6 +54,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/shareButton"
-        android:stackFromBottom="true" />
+        android:animateLayoutChanges="true"
+        android:stackFromBottom="false" />
 
 </RelativeLayout>
