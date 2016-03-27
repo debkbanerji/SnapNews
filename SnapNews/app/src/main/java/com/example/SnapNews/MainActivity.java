@@ -1,6 +1,7 @@
 package com.example.SnapNews;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
@@ -80,19 +81,25 @@ public class MainActivity extends AppCompatActivity {
                 Collections.sort(feedList[0], new Comparator() {
                     @Override
                     public int compare(Object lhs, Object rhs) {
-                        if (lhs instanceof Article && rhs instanceof Article) {
-                            if (!(((Article) lhs).getSeen()) && (((Article) lhs).getSeen())) {
+                        if (lhs instanceof HashMap && rhs instanceof HashMap) {
+                            boolean leftSeen = (Boolean) ((HashMap) lhs).get("seen");
+                            boolean rightSeen = (Boolean) ((HashMap) rhs).get("seen");
+                            if (leftSeen && !rightSeen) {
                                 return 1;
-                            }
-                            if ((((Article) lhs).getPostTime() - ((Article) rhs).getPostTime()) < 0) {
+                            }//checking if seen first
+                            if (((Long) ((HashMap) lhs).get("postTime") - (Long) ((HashMap) rhs).get("postTime")) < 0) {
                                 return 1;
-                            }
+                            }//checking post time next
                         }
                         return -1;
                     }
                 });
+                List<Object> singleList = new ArrayList<Object>();
+                if (feedList[0].size() > 0) {
+                    singleList.add(feedList[0].get(0));
+                }
                 feedAdapter[0] = new FeedListAdapter(
-                        getBaseContext(), com.example.SnapNews.R.layout.feed_item, feedList[0]);
+                        getBaseContext(), com.example.SnapNews.R.layout.feed_item, singleList);
                 feedListView.setAdapter(feedAdapter[0]);
             }
 
@@ -108,21 +115,24 @@ public class MainActivity extends AppCompatActivity {
         dismissButton.setOnClickListener(new View.OnClickListener() {//setting seen value of first to true and updating database
             @Override
             public void onClick(View v) {
-                final HashMap oldArticle = (HashMap) (feedList[0]).get(0);
-                Article updatedArticle = new Article((String) oldArticle.get("url"),
-                        (String) oldArticle.get("summary"),
-                        (String) oldArticle.get("title"), (String) oldArticle.get("pic"));
-                updatedArticle.see();
-                Iterator it = feed.entrySet().iterator();
-                while (it.hasNext()) {
-                    Map.Entry pair = (Map.Entry) it.next();
-                    if (((HashMap) pair.getValue()).containsValue(updatedArticle)) {
-                        it.remove();
+
+                if (feedList[0].size() > 0) {
+                    final HashMap oldArticle = (HashMap) (feedList[0]).get(0);
+                    Article updatedArticle = new Article((String) oldArticle.get("url"),
+                            (String) oldArticle.get("summary"),
+                            (String) oldArticle.get("title"), (String) oldArticle.get("pic"));
+                    updatedArticle.see();
+                    Iterator it = feed.entrySet().iterator();
+                    while (it.hasNext()) {
+                        Map.Entry pair = (Map.Entry) it.next();
+                        if (((HashMap) pair.getValue()).containsValue(oldArticle.get("url"))) {
+                            it.remove();
+                        }
                     }
+                    feed.put(((Long) updatedArticle.getPostTime()).toString(), updatedArticle);
+                    articleBase.removeValue();
+                    articleBase.child("ArticleList").setValue(feed);
                 }
-                feed.put(((Long) updatedArticle.getPostTime()).toString(), updatedArticle);
-                articleBase.removeValue();
-                articleBase.child("ArticleList").setValue(feed);
             }
         });
 
@@ -140,6 +150,8 @@ public class MainActivity extends AppCompatActivity {
                 final String[] summary = {""};
                 enteredURL.setText("");
 
+                Snackbar.make(v, "Generating Summary...", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
 
                 String parsedURL;
                 parsedURL = URL.replace(":", "%3A");
@@ -153,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(JSONObject response) {
                                 try {
-                                    summary[0] = "\n" + response.getString("summary");
+                                    summary[0] = response.getString("summary");
 
                                     summary[0] = summary[0].replace("[\"", "");
                                     summary[0] = summary[0].replace("\"]", "");
@@ -164,12 +176,14 @@ public class MainActivity extends AppCompatActivity {
                                     //cleaning up summary
                                     if (!URL.equals("")) {
                                         System.out.println("we made it");
-                                        addArticle[0] = new Article(URL, summary[0], (String) response.get("title"),(String) response.get("image"));
+                                        addArticle[0] = new Article(URL, summary[0], (String) response.get("title"), (String) response.get("image"));
 
                                         Iterator it = feed.entrySet().iterator();
                                         while (it.hasNext()) {
                                             Map.Entry pair = (Map.Entry) it.next();
-                                            if (((HashMap) pair.getValue()).containsValue(addArticle[0])) {
+//                                            if (((HashMap) pair.getValue()).containsValue(addArticle[0])) {
+                                            if (((HashMap) pair.getValue()).containsValue(addArticle[0].getURL())) {
+
                                                 it.remove();
                                             }
                                         }
@@ -199,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
                     public Map<String, String> getHeaders() throws AuthFailureError {
                         System.out.println("ADDING HEADERS");
                         Map<String, String> params = new HashMap<>();
-                        params.put("X-Mashape-Key", "RrzHM7Pua0mshdnzHG0MVXQlTenEp1fTeqzjsntEdavMWDQirq");
+                        params.put("X-Mashape-Key", "F08kcpH96qmshzyQFMuNcnHUaatjp166OAPjsnzWSuaaWbvWAo");
                         params.put("Accept", "application/json");
                         return params;
                     }
