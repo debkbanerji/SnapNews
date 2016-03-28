@@ -54,7 +54,7 @@ public class FeedListAdapter extends ArrayAdapter<HashMap> {
             Date resultDate = new Date((long) (m.get("postTime")));
             String stringDate = resultDate.toString();
             String[] splitDate = stringDate.split(" ");
-            stringDate = splitDate[0] + " " + splitDate[1] + " " + splitDate[2] + ", " + splitDate[3] + " ";
+            stringDate = "Shared: " + splitDate[0] + " " + splitDate[1] + " " + splitDate[2] + ", " + splitDate[3] + " ";
             timeText.setText(stringDate);
 
 

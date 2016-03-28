@@ -88,23 +88,23 @@ public class MainActivity extends AppCompatActivity {
                                                                            }
                                                                        } //Code for populating Feed
 
-//                Collection<Object> feedCollection = feed.values();
-//                boolean alltrue = true;
-//                for (Object o : feedCollection) {
-//                    if (o instanceof HashMap) {
-//                        boolean seenValue = (Boolean) ((HashMap) o).get("seen");
-//                        if (seenValue == false) {
-//                            alltrue = false;
-//                        }
-//                    }
-//                }
-//                if (alltrue) {// if everything is seen, set everything to unseen
-//                    for (Object o : feedCollection) {
-//                        if (o instanceof HashMap) {
-//                            ((HashMap) o).put("seen", false);
-//                        }
-//                    }
-//                }
+                Collection<Object> feedCollection = feed.values();
+                boolean alltrue = true;
+                for (Object o : feedCollection) {
+                    if (o instanceof HashMap) {
+                        boolean seenValue = (Boolean) ((HashMap) o).get("seen");
+                        if (seenValue == false) {
+                            alltrue = false;
+                        }
+                    }
+                }
+                if (alltrue) {// if everything is seen, set everything to unseen
+                    for (Object o : feedCollection) {
+                        if (o instanceof HashMap) {
+                            ((HashMap) o).put("seen", false);
+                        }
+                    }
+                }
                                                                        feedList[0] = new ArrayList<Object>(feed.values());
                                                                        //Collections.reverse(feedList[0]);
                                                                        Collections.sort(feedList[0], new Comparator() {
@@ -179,22 +179,22 @@ public class MainActivity extends AppCompatActivity {
             }
 
             );
-
-            ImageButton commentButton = (ImageButton) findViewById(R.id.commentButton);
-            assert commentButton!=null;
-
-            commentButton.setOnClickListener(new View.OnClickListener()
-
-            {//setting seen value of first to true and updating database
-                @Override
-                public void onClick (View v){
-
-                Intent intent = new Intent(getBaseContext(), Comments.class);
-                startActivity(intent);
-            }
-            }
-
-            );
+//
+//            ImageButton commentButton = (ImageButton) findViewById(R.id.commentButton);
+//            assert commentButton!=null;
+//
+//            commentButton.setOnClickListener(new View.OnClickListener()
+//
+//            {//setting seen value of first to true and updating database
+//                @Override
+//                public void onClick (View v){
+//
+//                Intent intent = new Intent(getBaseContext(), Comments.class);
+//                startActivity(intent);
+//            }
+//            }
+//
+//            );
 
 
             ImageButton shareButton = (ImageButton) findViewById(com.example.SnapNews.R.id.shareButton);
