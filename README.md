@@ -5,6 +5,6 @@ In progress features:
 -Comments sections for shared articles
 
 Screenshots:
-![Snapnews](/Screenshots/Screenshot_4.png?raw=true)
-![Snapnews](/Screenshots/Screenshot_3.png?raw=true)
+![Snapnews](/Screenshots/Screenshot_1.png?raw=true)
 ![Snapnews](/Screenshots/Screenshot_2.png?raw=true)
+![Snapnews](/Screenshots/Screenshot_3.png?raw=true)
