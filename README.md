@@ -1,6 +1,5 @@
 # SnapNews
-Snapnews is an Android application that allows you to share any news articles you like. Once you share the article a summary is automatically and intelligently generated and picture fetched for easy viewing, in order to minimize effort on the part of the reader, while still providing the information that people want to read.
-
+Snapnews is an Android application that allows people to share news articles. Once one shares the article a summary is automatically and intelligently generated and a picture fetched for easy viewing, in order to minimize effort on the part of the reader, while still providing the information that people want to read.
 In progress features:
 -Comments sections for shared articles
 
